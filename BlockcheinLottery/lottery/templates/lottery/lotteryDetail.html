@@ -1,0 +1,32 @@
+{% extends 'lottery/base.html' %}
+
+{% block content %}
+<h1>Называние: {{ lot.title}}</h1>
+<p>Состояние лотереи: {{ lottery_state}}</p>
+<p>Адресс: {{ lot.address}}</p>
+<p>Максимальное количество игроков: {{lot.max_players}}</p>
+<p>Цена билета (в Gwei): {{lot.gwei_fee}} </p>
+<p>Дата завершения: {{lot.time_end }}</p>
+<p>Количество участников: {{players_size }}</p>
+
+{% if recent_winner != "" %}
+<p>Победитель: {{recent_winner }}</p>
+{% endif %}
+
+{% if lot.creator_address == user.username and lot.address == ""%}
+    <a href="{% url 'set_address' lot.pk %}" class="btn btn-primary">Установить адрес контракта</a>
+{% endif%}
+
+{% if lot.creator_address == user.username and lottery_state == "Лоттерея закрыта"%}
+    <a href="{% url 'start_lottery' lot.pk %}" class="btn btn-primary">Стартовать лотерею</a>
+{% endif%}
+
+{% if lottery_state == "Лоттерея запущена" and is_participating == 0%}
+    <a href="{% url 'enter_lottery' lot.pk %}" class="btn btn-primary">Купить билет</a>
+{% endif%}
+
+{% if lot.creator_address == user.username and lottery_state == "Лоттерея запущена"%}
+    <a href="{% url 'end_lottery' lot.pk %}" class="btn btn-primary">Завершить лотерею</a>
+{% endif%}
+
+{% endblock %}

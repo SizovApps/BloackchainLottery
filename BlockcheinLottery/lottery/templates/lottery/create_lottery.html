@@ -1,0 +1,11 @@
+{% extends 'lottery/base.html' %}
+{% block content %}
+  <h1>{{title}}</h1>
+  <form action="{% url 'create_lottery' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-error">{{form.non_field_errors}}</div>
+    {{ form.as_p}}
+    <button type="submit">Создать</button>
+  </form>
+{% endblock %}

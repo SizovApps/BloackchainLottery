@@ -1,0 +1,20 @@
+{% extends 'lottery/base.html' %}
+
+{% block content %}
+
+<div class="row center mt-5">
+    {% for lot in lotteries %}
+      <div class="col-lg-4 mb-10">
+    <div class="card mb-5 mx-5 box-shadow" style="width: 18rem;">
+      <img src="{{ lot.photo.url }}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{lot.title}}</h5>
+        <p class="card-text">{{lot.content}}</p>
+        <p class="card-text">Максимальное количество игроков: {{lot.max_players}}</p>
+        <a href="{% url 'show_lottery' lot.pk %}" class="btn btn-primary">Открыть</a>
+      </div>
+          </div>
+            </div>
+    {% endfor %}
+      </div>
+{% endblock %}

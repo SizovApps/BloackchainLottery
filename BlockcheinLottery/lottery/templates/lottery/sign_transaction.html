@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+</head>
+<body>
+ <h1>{{ title }}</h1>
+ <input type="hidden" id="myVar" name="variable" value="{{ transaction_data }}">
+ <input type="hidden" id="value" name="value" value="{{ value }}">
+
+ {% if code == 1 %}
+ <a href="{% url 'save_contract_address' %}" id="deploy-metamask" type="submit">Подписать</a>
+ {% endif %}
+
+ {% if code == 2 %}
+ <a href="{% url 'home' %}" id="start-metamask" type="submit">Подписать</a>
+ <input type="hidden" id="toVar" name="toVar" value="{{ to }}">
+ {% endif %}
+
+ {% if code == 3 %}
+ <a href="{% url 'home' %}" id="enter-metamask" type="submit">Подписать</a>
+ <input type="hidden" id="toVar" name="toVar" value="{{ to }}">
+ {% endif %}
+
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+
+  <script>
+    const deployBtnMetamask = document.getElementById('deploy-metamask');
+    const startBtnMetamask = document.getElementById('start-metamask');
+    const enterBtnMetamask = document.getElementById('enter-metamask');
+
+
+
+    async function sendDeployTransaction() {
+       console.log(ethereum.selectedAddress);
+      let params = [{
+          "from": ethereum.selectedAddress,
+          "gas": Number(11971400).toString(16),
+          "gasPrice": Number(250000000).toString(16),
+          "data": document.getElementById("myVar").value
+           }];
+      console.log(params)
+      let result = await window.ethereum.request({method: "eth_sendTransaction", params}).catch((err)=> {
+          console.log(err)
+      })
+    }
+
+    async function sendStartTransaction() {
+       console.log(ethereum.selectedAddress);
+      let params = [{
+          "from": ethereum.selectedAddress,
+          "to": document.getElementById("toVar").value,
+          "gas": Number(11971400).toString(16),
+          "gasPrice": Number(250000000).toString(16),
+          "data": document.getElementById("myVar").value
+           }];
+      console.log(params)
+      let result = await window.ethereum.request({method: "eth_sendTransaction", params}).catch((err)=> {
+          console.log(err)
+      })
+    }
+
+    async function enterTransaction() {
+       console.log(ethereum.selectedAddress);
+       console.log(document.getElementById("value").value);
+      let params = [{
+          "from": ethereum.selectedAddress,
+          "to":  document.getElementById("toVar").value,
+          "gas": Number(11971400).toString(16),
+          "gasPrice": Number(250000000).toString(16),
+          "data": document.getElementById("myVar").value,
+          "value": document.getElementById("myVar").value,
+           }];
+      console.log(params)
+      let result = await window.ethereum.request({method: "eth_sendTransaction", params}).catch((err)=> {
+          console.log(err)
+      })
+    }
+
+
+
+    function init() {
+        if (deployBtnMetamask != null) {
+            deployBtnMetamask.addEventListener('click', async () => {
+            sendDeployTransaction().catch((error) => console.log(error));
+            });
+        }
+        if (startBtnMetamask != null) {
+            startBtnMetamask.addEventListener('click', async () => {
+            sendStartTransaction().catch((error) => console.log(error));
+            });
+        }
+        if (enterBtnMetamask != null) {
+            enterBtnMetamask.addEventListener('click', async () => {
+            enterTransaction().catch((error) => console.log(error));
+            });
+        }
+
+    }
+
+    window.addEventListener('load', () => {
+      init();
+    });
+
+    </script>
+</body>
+</html>
