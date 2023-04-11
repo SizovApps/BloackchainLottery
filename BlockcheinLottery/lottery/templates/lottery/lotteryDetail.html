@@ -1,6 +1,7 @@
 {% extends 'lottery/base.html' %}
 
 {% block content %}
+<div class="ms-5">
 <h1>Называние: {{ lot.title}}</h1>
 <p>Состояние лотереи: {{ lottery_state}}</p>
 <p>Адресс: {{ lot.address}}</p>
@@ -28,5 +29,5 @@
 {% if lot.creator_address == user.username and lottery_state == "Лоттерея запущена"%}
     <a href="{% url 'end_lottery' lot.pk %}" class="btn btn-primary">Завершить лотерею</a>
 {% endif%}
-
+</div>
 {% endblock %}

@@ -3,13 +3,11 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-        <h1>Welcome Moralis Web3 User, {{ user.username }} !</h1>
-        <a href="">Logout</a>
-        <br/>
-        <a href="{% url 'my_profile' %}"> My profile </a>
+        <h1 class="ms-5" >Вы вошли под аккаунтом: {{ user.username }} !</h1>
+
     {% else %}
-        <h1>Вход</h1>
-        <button class="btn" id="auth-metamask">Войти используя Metamask</button>
+        <h1 class="ms-5">Вход</h1>
+        <button class="btn btn-primary ms-5" type="submit" id="auth-metamask">Войти используя Metamask</button>
     {% endif %}
     </div>
 

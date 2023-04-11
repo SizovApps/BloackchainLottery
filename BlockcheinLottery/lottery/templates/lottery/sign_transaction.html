@@ -10,7 +10,7 @@
  <input type="hidden" id="value" name="value" value="{{ value }}">
 
  {% if code == 1 %}
- <a href="{% url 'save_contract_address' %}" id="deploy-metamask" type="submit">Подписать</a>
+ <a class="btn btn-primary" href="{% url 'save_contract_address' %}" id="deploy-metamask" type="submit">Подписать</a>
  {% endif %}
 
  {% if code == 2 %}
