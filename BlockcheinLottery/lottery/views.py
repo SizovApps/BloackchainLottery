@@ -77,9 +77,6 @@ class UpdateLottery(UpdateView):
     def get_success_url(self):
         return reverse("home")
 
-def index(request):
-    return render(request, 'lottery/index.html', {'title': 'Главная', 'menu': menu})
-
 
 def about(request, lotId):
     return render(request, 'lottery/sign_transaction.html', {'title': 'О Сайте'})
