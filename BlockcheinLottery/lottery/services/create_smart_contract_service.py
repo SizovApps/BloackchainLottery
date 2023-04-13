@@ -22,15 +22,10 @@ bytecode = "60806040523480156200001157600080fd5b50604051620010d7380380620010d783
 def create_smart_contract(lottery):
     web3 = Web3(Web3.HTTPProvider(url))
 
-    abi_file = open('/Users/user/Desktop/ВШЭ/Курсовой проект/LotteryProject/BlockcheinLottery/lottery/services/lottery_abi.json')
+    abi_file = open('ottery_abi.json')
     abi = json.load(abi_file)
 
     contract = web3.eth.contract(abi=abi, bytecode=bytecode)
-    # print(contract.functions.getEntranceFee().call())
-
-    nonce = web3.eth.getTransactionCount(public_key)
-    print("Create contract")
-    print("lottery.gwei_fee: " + str(lottery.gwei_fee) + " " + str(lottery.max_players))
     transaction = contract.constructor(lottery.gwei_fee, lottery.max_players).build_transaction(
         {
             "gasPrice": web3.eth.gas_price,
@@ -39,19 +34,7 @@ def create_smart_contract(lottery):
             "nonce": web3.eth.getTransactionCount(public_key),
         }
     )
-    print("sign!!!")
     return transaction["data"]
-    # # signed_transaction = web3.eth.account.sign_transaction(transaction, private_key=private_key)
-    # tx_hash = web3.eth.send_raw_transaction(signed_transaction.rawTransaction)
-    # print("HASH")
-    # print(tx_hash)
-    # tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
-    # print("RECEIPT")
-    # print(tx_receipt)
-    # print(tx_receipt["contractAddress"])
-    #
-    # lottery.address = tx_receipt["contractAddress"]
-    # lottery.save()
 
 
 lottery_state = {
@@ -68,11 +51,9 @@ def get_lottery_info(address, user_address):
     print("Enter get lottery")
     try:
         web3 = Web3(Web3.HTTPProvider(url))
-        abi_file = open('/Users/user/Desktop/ВШЭ/Курсовой проект/LotteryProject/BlockcheinLottery/lottery/services/lottery_abi.json')
+        abi_file = open('lottery/services/lottery_abi.json')
         abi = json.load(abi_file)
-        print("Enter to get " + address)
         contract = web3.eth.contract(address=address, abi=abi)
-        print("GOT contract")
         res = contract.functions.getLotteryState().call()
         recent_winner = ""
         try:
@@ -82,24 +63,13 @@ def get_lottery_info(address, user_address):
         user_address = str(user_address)
         players_size = contract.functions.getPlayersSize().call()
         is_participating = 0
-        print(user_address)
         try:
             is_participating = contract.functions.isParticipating(Web3.toChecksumAddress(user_address)).call()
         except:
             traceback.print_exc()
-            print("Not started yet")
-        print(res)
-        print(recent_winner)
-        print(players_size)
-        print(is_participating)
         return lottery_state[res], recent_winner, players_size, is_participating
     except:
-        #0xb19672D8E838442FFb9A354558bea2fd7f2f708b
-        #0x8433e03b494ed08936ff8a9f3f9980c1dcba7c74
-
-
         traceback.print_exc()
-        print("Exception")
         return lottery_state[-1], 0, 0, 0
 
 
