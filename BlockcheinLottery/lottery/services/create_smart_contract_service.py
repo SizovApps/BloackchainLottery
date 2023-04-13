@@ -48,7 +48,6 @@ lottery_state = {
 def get_lottery_info(address, user_address):
     if address == "":
         return lottery_state[-1], 0, 0, 0
-    print("Enter get lottery")
     try:
         web3 = Web3(Web3.HTTPProvider(url))
         abi_file = open('lottery/services/lottery_abi.json')
@@ -76,12 +75,10 @@ def get_lottery_info(address, user_address):
 def start_lottery_transaction(lottery):
     web3 = Web3(Web3.HTTPProvider(url))
 
-    abi_file = open('/Users/user/Desktop/ВШЭ/Курсовой проект/LotteryProject/BlockcheinLottery/lottery/services/lottery_abi.json')
+    abi_file = open('lottery/services/lottery_abi.json')
     abi = json.load(abi_file)
 
     contract = web3.eth.contract(abi=abi, bytecode=bytecode)
-    print("Contract!")
-    print(web3.eth.gas_price)
     transaction = contract.functions.startLottery().build_transaction({
         "to": lottery.address,
         "gasPrice": web3.eth.gas_price,
@@ -89,20 +86,16 @@ def start_lottery_transaction(lottery):
         "from": public_key,
         "nonce": web3.eth.getTransactionCount(public_key),
     })
-    print(transaction["data"])
     return transaction["data"]
 
 
 def enter_lottery_transaction(lottery):
-    print("enter_lottery_transaction")
     web3 = Web3(Web3.HTTPProvider(url))
 
-    abi_file = open('/Users/user/Desktop/ВШЭ/Курсовой проект/LotteryProject/BlockcheinLottery/lottery/services/lottery_abi.json')
+    abi_file = open('lottery/services/lottery_abi.json')
     abi = json.load(abi_file)
 
     contract = web3.eth.contract(abi=abi, bytecode=bytecode)
-    print("Contract!")
-    print(web3.eth.gas_price)
     transaction = contract.functions.enter().build_transaction({
         "to": lottery.address,
         "gasPrice": web3.eth.gas_price,
@@ -111,19 +104,16 @@ def enter_lottery_transaction(lottery):
         "nonce": web3.eth.getTransactionCount(public_key),
         "value": lottery.gwei_fee
     })
-    print(transaction["data"])
     return transaction["data"]
 
 
 def end_lottery_transaction(lottery):
     web3 = Web3(Web3.HTTPProvider(url))
 
-    abi_file = open(
-        '/Users/user/Desktop/ВШЭ/Курсовой проект/LotteryProject/BlockcheinLottery/lottery/services/lottery_abi.json')
+    abi_file = open('lottery/services/lottery_abi.json')
     abi = json.load(abi_file)
 
     contract = web3.eth.contract(abi=abi, bytecode=bytecode)
-    print("end_lottery!")
 
     transaction = contract.functions.endLottery().build_transaction({
         "to": lottery.address,
@@ -133,14 +123,10 @@ def end_lottery_transaction(lottery):
         "nonce": web3.eth.getTransactionCount(public_key),
     })
 
-    print(transaction["data"])
-
     signed_transaction = web3.eth.account.sign_transaction(transaction, private_key=private_key)
     tx_hash = web3.eth.send_raw_transaction(signed_transaction.rawTransaction)
-    print("HASH")
     print(tx_hash)
     tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
-    print("RECEIPT")
     print(tx_receipt)
 
 
